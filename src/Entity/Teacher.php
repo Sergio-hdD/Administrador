@@ -17,9 +17,15 @@ class Teacher extends User
      */
     private $course;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TeacherExam::class, mappedBy="teacher")
+     */
+    private $teacherExams;
+
     public function __construct()
     {
         $this->course = new ArrayCollection();
+        $this->teacherExams = new ArrayCollection();
     }
 
     /**
@@ -42,6 +48,36 @@ class Teacher extends User
     public function removeCourse(Course $course): self
     {
         $this->course->removeElement($course);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TeacherExam>
+     */
+    public function getTeacherExams(): Collection
+    {
+        return $this->teacherExams;
+    }
+
+    public function addTeacherExam(TeacherExam $teacherExam): self
+    {
+        if (!$this->teacherExams->contains($teacherExam)) {
+            $this->teacherExams[] = $teacherExam;
+            $teacherExam->setTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacherExam(TeacherExam $teacherExam): self
+    {
+        if ($this->teacherExams->removeElement($teacherExam)) {
+            // set the owning side to null (unless already changed)
+            if ($teacherExam->getTeacher() === $this) {
+                $teacherExam->setTeacher(null);
+            }
+        }
 
         return $this;
     }

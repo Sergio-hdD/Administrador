@@ -44,9 +44,15 @@ class Exam
      */
     private $inscriptionExams;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TeacherExam::class, mappedBy="exam")
+     */
+    private $teacherExams;
+
     public function __construct()
     {
         $this->inscriptionExams = new ArrayCollection();
+        $this->teacherExams = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,6 +132,36 @@ class Exam
             // set the owning side to null (unless already changed)
             if ($inscriptionExam->getExam() === $this) {
                 $inscriptionExam->setExam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TeacherExam>
+     */
+    public function getTeacherExams(): Collection
+    {
+        return $this->teacherExams;
+    }
+
+    public function addTeacherExam(TeacherExam $teacherExam): self
+    {
+        if (!$this->teacherExams->contains($teacherExam)) {
+            $this->teacherExams[] = $teacherExam;
+            $teacherExam->setExam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacherExam(TeacherExam $teacherExam): self
+    {
+        if ($this->teacherExams->removeElement($teacherExam)) {
+            // set the owning side to null (unless already changed)
+            if ($teacherExam->getExam() === $this) {
+                $teacherExam->setExam(null);
             }
         }
 
