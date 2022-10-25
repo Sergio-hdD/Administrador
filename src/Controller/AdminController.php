@@ -35,6 +35,7 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $admin->setRoles(["ROLE_ADMIN"]);
             $adminRepository->add($admin, true);
 
             return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);

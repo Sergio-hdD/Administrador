@@ -35,6 +35,7 @@ class TeacherController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $teacher->setRoles(["ROLE_TEACHER"]);
             $teacherRepository->add($teacher, true);
 
             return $this->redirectToRoute('app_teacher_index', [], Response::HTTP_SEE_OTHER);

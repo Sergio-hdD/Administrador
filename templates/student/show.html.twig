@@ -8,10 +8,6 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ student.id }}</td>
-            </tr>
-            <tr>
                 <th>Dni</th>
                 <td>{{ student.dni }}</td>
             </tr>
@@ -28,16 +24,8 @@
                 <td>{{ student.name }}</td>
             </tr>
             <tr>
-                <th>Password</th>
-                <td>{{ student.password }}</td>
-            </tr>
-            <tr>
                 <th>Phone</th>
                 <td>{{ student.phone }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ student.roles ? student.roles|json_encode : '' }}</td>
             </tr>
         </tbody>
     </table>

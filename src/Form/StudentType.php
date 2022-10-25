@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,10 +15,10 @@ class StudentType extends AbstractType
     {
         $builder
             ->add('dni')
-            ->add('email')
+            ->add('email', EmailType::class)
             ->add('lastname')
             ->add('name')
-            ->add('password')
+            ->add('password', PasswordType::class)
             ->add('phone')
         ;
     }
