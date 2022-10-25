@@ -30,3 +30,7 @@ class Student extends User
 
 ```
 
+- Hago el crud de las 3 hijas de User, luego saco atributos del form 
+``` 
+Del AdminType, del StudentType y del TeacherType saco ->add('roles'), en el caso de TeacherType también saco el ->add('course')
+``` 
