@@ -8,28 +8,22 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Dni</th>
                 <th>Email</th>
                 <th>Lastname</th>
                 <th>Name</th>
-                <th>Password</th>
                 <th>Phone</th>
-                <th>Roles</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for admin in admins %}
             <tr>
-                <td>{{ admin.id }}</td>
                 <td>{{ admin.dni }}</td>
                 <td>{{ admin.email }}</td>
                 <td>{{ admin.lastname }}</td>
                 <td>{{ admin.name }}</td>
-                <td>{{ admin.password }}</td>
                 <td>{{ admin.phone }}</td>
-                <td>{{ admin.roles ? admin.roles|json_encode : '' }}</td>
                 <td>
                     <a href="{{ path('app_admin_show', {'id': admin.id}) }}">show</a>
                     <a href="{{ path('app_admin_edit', {'id': admin.id}) }}">edit</a>

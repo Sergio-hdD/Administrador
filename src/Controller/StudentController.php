@@ -35,6 +35,7 @@ class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $student->setRoles(["ROLE_STUDENT"]);
             $studentRepository->add($student, true);
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
