@@ -8,6 +8,7 @@ use App\Repository\TeacherRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,7 +29,7 @@ class TeacherController extends AbstractController
     /**
      * @Route("/new", name="app_teacher_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, TeacherRepository $teacherRepository): Response
+    public function new(Request $request, TeacherRepository $teacherRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $teacher = new Teacher();
         $form = $this->createForm(TeacherType::class, $teacher);
@@ -36,6 +37,10 @@ class TeacherController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $teacher->setRoles(["ROLE_TEACHER"]);
+            
+            $hashedPassword = $passwordHasher->hashPassword( $teacher, $form['password']->getData() );
+            $teacher->setPassword($hashedPassword);
+
             $teacherRepository->add($teacher, true);
 
             return $this->redirectToRoute('app_teacher_index', [], Response::HTTP_SEE_OTHER);
@@ -60,12 +65,16 @@ class TeacherController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_teacher_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Teacher $teacher, TeacherRepository $teacherRepository): Response
+    public function edit(Request $request, Teacher $teacher, TeacherRepository $teacherRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(TeacherType::class, $teacher);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $hashedPassword = $passwordHasher->hashPassword( $teacher, $form['password']->getData() );
+            $teacher->setPassword($hashedPassword);
+
             $teacherRepository->add($teacher, true);
 
             return $this->redirectToRoute('app_teacher_index', [], Response::HTTP_SEE_OTHER);
