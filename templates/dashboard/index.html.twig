@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h2>Bienvenido al {{ controller_name }}! ✅</h2>
+
+    Crear:
+    <ul>
+        <li><code><a href="{{ path('app_admin_new') }}">Crear un Administrador</a></code></li>
+        <li><code><a href="{{ path('app_teacher_new') }}">Crear un Profesor</a></code></li>
+        <li><code><a href="{{ path('app_student_new') }}">Crear un Estudiante</a></code></li>
+    </ul>
+    <br/>
+    <br/>
+    Ver todos:
+    <ul>
+        <li><code><a href="{{ path('app_admin_index') }}">Ver los Administradores</a></code></li>
+        <li><code><a href="{{ path('app_teacher_index') }}">Ver los Profesores</a></code></li>
+        <li><code><a href="{{ path('app_student_index') }}">Ver los Estudiantes</a></code></li>
+    </ul>
+</div>
+{% endblock %}

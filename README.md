@@ -34,3 +34,9 @@ class Student extends User
 ``` 
 Del AdminType, del StudentType y del TeacherType saco ->add('roles'), en el caso de TeacherType también saco el ->add('course')
 ``` 
+
+## Agrego un dashboard 
+- Con el siguiente comando (agregará el DashboardController y su index)
+```
+php bin/console make:controller Dashboard
+```
