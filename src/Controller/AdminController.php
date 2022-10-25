@@ -8,6 +8,7 @@ use App\Repository\AdminRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,7 +29,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/new", name="app_admin_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, AdminRepository $adminRepository): Response
+    public function new(Request $request, AdminRepository $adminRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $admin = new Admin();
         $form = $this->createForm(AdminType::class, $admin);
@@ -36,6 +37,10 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $admin->setRoles(["ROLE_ADMIN"]);
+            
+            $hashedPassword = $passwordHasher->hashPassword( $admin, $form['password']->getData() );
+            $admin->setPassword($hashedPassword);
+
             $adminRepository->add($admin, true);
 
             return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);
@@ -60,12 +65,16 @@ class AdminController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_admin_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Admin $admin, AdminRepository $adminRepository): Response
+    public function edit(Request $request, Admin $admin, AdminRepository $adminRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(AdminType::class, $admin);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $hashedPassword = $passwordHasher->hashPassword( $admin, $form['password']->getData() );
+            $admin->setPassword($hashedPassword);
+
             $adminRepository->add($admin, true);
 
             return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);

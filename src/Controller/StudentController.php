@@ -8,6 +8,7 @@ use App\Repository\StudentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,7 +29,7 @@ class StudentController extends AbstractController
     /**
      * @Route("/new", name="app_student_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, StudentRepository $studentRepository): Response
+    public function new(Request $request, StudentRepository $studentRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
@@ -36,6 +37,10 @@ class StudentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $student->setRoles(["ROLE_STUDENT"]);
+            
+            $hashedPassword = $passwordHasher->hashPassword( $student, $form['password']->getData() );
+            $student->setPassword($hashedPassword);
+
             $studentRepository->add($student, true);
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
@@ -60,12 +65,16 @@ class StudentController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_student_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Student $student, StudentRepository $studentRepository): Response
+    public function edit(Request $request, Student $student, StudentRepository $studentRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $hashedPassword = $passwordHasher->hashPassword( $student, $form['password']->getData() );
+            $student->setPassword($hashedPassword);
+
             $studentRepository->add($student, true);
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
