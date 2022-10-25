@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CourseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +48,16 @@ class Course
      * @ORM\Column(type="string", length=45, nullable=true)
      */
     private $turn;
+
+    /**
+     * @ORM\OneToMany(targetEntity=InscriptionCourse::class, mappedBy="course")
+     */
+    private $inscriptionCourses;
+
+    public function __construct()
+    {
+        $this->inscriptionCourses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -123,4 +135,34 @@ class Course
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, InscriptionCourse>
+     */
+    public function getInscriptionCourses(): Collection
+    {
+        return $this->inscriptionCourses;
+    }
+
+    public function addInscriptionCourse(InscriptionCourse $inscriptionCourse): self
+    {
+        if (!$this->inscriptionCourses->contains($inscriptionCourse)) {
+            $this->inscriptionCourses[] = $inscriptionCourse;
+            $inscriptionCourse->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscriptionCourse(InscriptionCourse $inscriptionCourse): self
+    {
+        if ($this->inscriptionCourses->removeElement($inscriptionCourse)) {
+            // set the owning side to null (unless already changed)
+            if ($inscriptionCourse->getCourse() === $this) {
+                $inscriptionCourse->setCourse(null);
+            }
+        }
+
+        return $this;
+    }    
 }

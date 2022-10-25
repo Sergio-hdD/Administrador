@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ExamRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,16 @@ class Exam
      * @ORM\Column(type="date", nullable=true)
      */
     private $untilChangeNote;
+
+    /**
+     * @ORM\OneToMany(targetEntity=InscriptionExam::class, mappedBy="exam")
+     */
+    private $inscriptionExams;
+
+    public function __construct()
+    {
+        $this->inscriptionExams = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +98,36 @@ class Exam
     public function setUntilChangeNote(?\DateTimeInterface $untilChangeNote): self
     {
         $this->untilChangeNote = $untilChangeNote;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InscriptionExam>
+     */
+    public function getInscriptionExams(): Collection
+    {
+        return $this->inscriptionExams;
+    }
+
+    public function addInscriptionExam(InscriptionExam $inscriptionExam): self
+    {
+        if (!$this->inscriptionExams->contains($inscriptionExam)) {
+            $this->inscriptionExams[] = $inscriptionExam;
+            $inscriptionExam->setExam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscriptionExam(InscriptionExam $inscriptionExam): self
+    {
+        if ($this->inscriptionExams->removeElement($inscriptionExam)) {
+            // set the owning side to null (unless already changed)
+            if ($inscriptionExam->getExam() === $this) {
+                $inscriptionExam->setExam(null);
+            }
+        }
 
         return $this;
     }
