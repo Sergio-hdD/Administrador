@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Course{% endblock %}
+
+{% block body %}
+    <h1>Course</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ course.id }}</td>
+            </tr>
+            <tr>
+                <th>UntilChangeNote</th>
+                <td>{{ course.untilChangeNote ? course.untilChangeNote|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DateStart</th>
+                <td>{{ course.dateStart ? course.dateStart|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DateEnd</th>
+                <td>{{ course.dateEnd ? course.dateEnd|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DayCourse</th>
+                <td>{{ course.dayCourse }}</td>
+            </tr>
+            <tr>
+                <th>Turn</th>
+                <td>{{ course.turn }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_course_index') }}">back to list</a>
+
+    <a href="{{ path('app_course_edit', {'id': course.id}) }}">edit</a>
+
+    {{ include('course/_delete_form.html.twig') }}
+{% endblock %}
