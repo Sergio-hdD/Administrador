@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}InscriptionExam index{% endblock %}
+
+{% block body %}
+    <h1>InscriptionExam index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>TimeSince</th>
+                <th>TimeUntil</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inscription_exam in inscription_exams %}
+            <tr>
+                <td>{{ inscription_exam.id }}</td>
+                <td>{{ inscription_exam.timeSince ? inscription_exam.timeSince|date('Y-m-d') : '' }}</td>
+                <td>{{ inscription_exam.timeUntil ? inscription_exam.timeUntil|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_inscription_exam_show', {'id': inscription_exam.id}) }}">show</a>
+                    <a href="{{ path('app_inscription_exam_edit', {'id': inscription_exam.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_inscription_exam_new') }}">Create new</a>
+{% endblock %}
