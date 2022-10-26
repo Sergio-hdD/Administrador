@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}InscriptionCourse{% endblock %}
+
+{% block body %}
+    <h1>InscriptionCourse</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ inscription_course.id }}</td>
+            </tr>
+            <tr>
+                <th>TimeSince</th>
+                <td>{{ inscription_course.timeSince ? inscription_course.timeSince|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>TimeUntil</th>
+                <td>{{ inscription_course.timeUntil ? inscription_course.timeUntil|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_inscription_course_index') }}">back to list</a>
+
+    <a href="{{ path('app_inscription_course_edit', {'id': inscription_course.id}) }}">edit</a>
+
+    {{ include('inscription_course/_delete_form.html.twig') }}
+{% endblock %}
