@@ -33,10 +33,31 @@ class Student extends User
 - Hago el crud de las 3 hijas de User, luego saco atributos del form 
 ``` 
 Del AdminType, del StudentType y del TeacherType saco ->add('roles'), en el caso de TeacherType también saco el ->add('course')
-``` 
+```
 
 ## Agrego un dashboard 
 - Con el siguiente comando (agregará el DashboardController y su index)
 ```
 php bin/console make:controller Dashboard
+```
+
+## Login - (luego de haber agregado la encriptación de contraseña)
+- Creo el formulario de login, url logout y copnfiguraciones necesarias con...
+```
+php bin/console make:auth
+```
+Después de ejecutar el comando anterior
+⦁	Pregunta que estilo de autenticación quiero, ingreso “1” para elegir “Login form authenticator .
+⦁	Pide un nombre para el authenticartor, el recomendado en el link es “LoginFormAuthenticator”, uso ese. 
+⦁	Pide un nombre para el  controller, elijo el por defecto “SecurityController”.
+⦁	Si quero generar una ruta para login/logout, elijo “yes”.
+
+- Luego de teminar del paso anterior debo especificar la url de destino luego del inicio de sesisión correcto
+```
+Para eso ir a src\Security\LoginFormAuthenticator.php
+ En la función "onAuthenticationSuccess" buscar la siguiente línea 
+    "throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);"
+ y cambiarla por 
+    "return new RedirectResponse('dashboard');" 
+ dónde "dashboard" es el @Route del controller/función de destino luego del inicio de sesisión correcto     
 ```
