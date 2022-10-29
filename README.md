@@ -61,3 +61,4 @@ Para eso ir a src\Security\LoginFormAuthenticator.php
     "return new RedirectResponse('dashboard');" 
  dónde "dashboard" es el @Route del controller/función de destino luego del inicio de sesisión correcto     
 ```
+## Para que siempre inicie en el dashboard hago el cambio del controller del dashboard y tengo que modificar lo del LoginFormAuthenticator ya que no lo tenía con el name
