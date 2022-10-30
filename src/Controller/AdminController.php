@@ -6,6 +6,9 @@ use App\Entity\Admin;
 use App\Form\AdminType;
 use App\Repository\AdminRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -49,6 +52,58 @@ class AdminController extends AbstractController
         return $this->renderForm('admin/new.html.twig', [
             'admin' => $admin,
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/new/externo", name="app_admin_new_externo", methods={"GET", "POST"})
+     */
+    public function login(Request $request, AdminRepository $adminRepository, UserPasswordHasherInterface $passwordHasher): Response
+    {
+
+        if($this->getUser()){//Si accede a esta ruta y está logueado
+            return $this->redirectToRoute('app_admin_new', [], Response::HTTP_SEE_OTHER);
+        }
+        $admin = new Admin();
+        $form = $this->createFormBuilder()
+            ->add('dni', TextType::class, ['attr' => ['placeholder' => 'DNI'], 'label' => 'DNI', 'required' => true])
+            ->add('email', TextType::class, ['attr' => ['placeholder' => 'Email'], 'label' => 'Email', 'required' => true])
+            ->add('lastname', TextType::class, ['attr' => ['placeholder' => 'Lastname'], 'label' => 'Lastname', 'required' => true])
+            ->add('name', TextType::class, ['attr' => ['placeholder' => 'Name'], 'label' => 'Name', 'required' => true])
+            ->add('password', PasswordType::class, ['attr' => ['placeholder' => 'Password'], 'label' => 'Password', 'required' => true])
+            ->add('phone', TextType::class, ['attr' => ['placeholder' => 'Phone'], 'label' => 'Phone', 'required' => true])
+            ->add('securityKey', PasswordType::class, ['attr' => ['placeholder' => 'Clave de seguridad'], 'label' => 'Clave de seguridad', 'required' => true])
+            ->add('submit', SubmitType::class, [ 'attr' => ['class' => 'btn btn-primary w-100',], 'label' => '<i class="fas fa-sync fa-spin"></i> Guardar', 'label_html' => true,]) 
+            ->getForm();
+        
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->getData()['securityKey'] == "1234") {
+                $admin->setDni($form->getData()['dni']);
+                $admin->setEmail($form->getData()['email']);
+                $admin->setLastname($form->getData()['lastname']);
+                $admin->setName($form->getData()['name']);
+                $admin->setPhone($form->getData()['phone']);
+                $admin->setRoles(["ROLE_ADMIN"]);
+                
+                $hashedPassword = $passwordHasher->hashPassword( $admin, $form->getData()['password']);
+                $admin->setPassword($hashedPassword);
+                $adminRepository->add($admin, true);
+    
+                return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+
+            } else {
+
+                $this->addFlash('massage', 'Clave se seguridad incorrecta');                
+                return $this->render('admin/new_externo.html.twig', [
+                    'form' => $form->createView()
+                ]);
+            }
+        }
+
+        return $this->render('admin/new_externo.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
