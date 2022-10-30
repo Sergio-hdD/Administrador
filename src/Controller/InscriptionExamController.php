@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\InscriptionExam;
 use App\Form\InscriptionExamType;
 use App\Repository\InscriptionExamRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/inscription/exam")
+ * @Security("is_granted('ROLE_ADMIN')")
  */
 class InscriptionExamController extends AbstractController
 {
