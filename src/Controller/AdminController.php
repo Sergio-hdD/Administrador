@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Admin;
 use App\Form\AdminType;
 use App\Repository\AdminRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,6 +22,7 @@ class AdminController extends AbstractController
 {
     /**
      * @Route("/", name="app_admin_index", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function index(AdminRepository $adminRepository): Response
     {
@@ -31,6 +33,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/new", name="app_admin_new", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function new(Request $request, AdminRepository $adminRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -109,6 +112,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/{id}", name="app_admin_show", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function show(Admin $admin): Response
     {
@@ -119,6 +123,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="app_admin_edit", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function edit(Request $request, Admin $admin, AdminRepository $adminRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -143,6 +148,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/{id}", name="app_admin_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function delete(Request $request, Admin $admin, AdminRepository $adminRepository): Response
     {

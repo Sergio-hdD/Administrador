@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Matter;
 use App\Form\MatterType;
 use App\Repository\MatterRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/matter")
+ * @Security("is_granted('ROLE_ADMIN')")
  */
 class MatterController extends AbstractController
 {
