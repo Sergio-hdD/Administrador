@@ -50,6 +50,11 @@ class Matter
         $this->exams = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        $cuatrimestre = ($this->isFirstFourMonth)? "Primero" : "Segundo";
+        return "Materia ".$this->name." pertenece a ". $this->yearCarrer." año, cuantrimestre ".$cuatrimestre;
+    }
     public function getId(): ?int
     {
         return $this->id;
