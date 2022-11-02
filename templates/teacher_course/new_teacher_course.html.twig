@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teacher-Course{% endblock %}
+
+{% block body %}
+
+    <h1>Asignar una cursada a un profesor</h1>
+
+    {% for flash_message in app.session.flashbag.get('massage_success') %}
+        <div class="flash-success">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashbag.get('massage_danger') %}
+        <div class="flash-danger">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.teacher)}}
+        {{ form_row(form.course)}}
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_dashboard') }}">ir al dashboard</a>
+{% endblock %}
