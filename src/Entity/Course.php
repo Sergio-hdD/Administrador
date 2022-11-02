@@ -71,6 +71,11 @@ class Course
         $this->studentCourses = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return "Cursada de materia ".$this->matter->getName()." dia ".$this->dayCourse." turno ".$this->turn." inicio ".$this->dateStart->format('d-m-Y')." fin ".$this->dateEnd->format('d-m-Y');    
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
