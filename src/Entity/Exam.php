@@ -61,6 +61,10 @@ class Exam
         $this->studentExams = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->matter." fecha ".$this->fecha->format('d-m-Y')." hora ".$this->hora->format('HH:mm');
+    }
     public function getId(): ?int
     {
         return $this->id;
