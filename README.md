@@ -62,3 +62,28 @@ Para eso ir a src\Security\LoginFormAuthenticator.php
  dónde "dashboard" es el @Route del controller/función de destino luego del inicio de sesisión correcto     
 ```
 ## Para que siempre inicie en el dashboard hago el cambio del controller del dashboard y tengo que modificar lo del LoginFormAuthenticator ya que no lo tenía con el name
+```
+```
+
+## Para la generación de web service de SOAP en este caso solo para crear un usuario (Sea admin, student o teacher)
+   Video guía: https://www.youtube.com/watch?v=yWFfCuazfjQ&t=71s&ab_channel=AnderCode
+
+- Además de lo que está a la vista tuve que ejecutar el siguiente comando:
+```
+composer require econea/nusoap
+```
+Al ejecutar este comando se nos agrega el archivo "nusoap.php" en la siguiente ruta vendor\econea\nusoap\src\nusoap.php
+
+- Para ver/generar el XML que nos permite hacer uso el web service accedemos (con xampp levantado) de la siguiente manera:
+```
+http://localhost/administrador/Soap/UserInsertSoap.php
+y luego dar clic sobre "WSDL" en "View the WSDL for the service. Click on an operation name to view it's details"
+
+o directamente acceder de la siguiente forma:
+http://localhost/administrador/Soap/UserInsertSoap.php?wsdl
+```
+Me hubiese gustado poner la carpeta Soap dentro de la carpeta src, pero por pruebas que hice sé que, luego al consumir desde los Controller, me genera problemas el require_once por el nivel de los archivos
+- Para probarlo se usa
+```
+SoapUI
+```
