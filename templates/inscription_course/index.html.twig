@@ -11,6 +11,7 @@
                 <th>Id</th>
                 <th>TimeSince</th>
                 <th>TimeUntil</th>
+                <th>Course</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -20,6 +21,8 @@
                 <td>{{ inscription_course.id }}</td>
                 <td>{{ inscription_course.timeSince ? inscription_course.timeSince|date('Y-m-d') : '' }}</td>
                 <td>{{ inscription_course.timeUntil ? inscription_course.timeUntil|date('Y-m-d') : '' }}</td>
+                <td>{{ inscription_course.course }}</td>
+            
                 <td>
                     <a href="{{ path('app_inscription_course_show', {'id': inscription_course.id}) }}">show</a>
                     <a href="{{ path('app_inscription_course_edit', {'id': inscription_course.id}) }}">edit</a>
