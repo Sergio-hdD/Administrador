@@ -90,16 +90,17 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->getData()['securityKey'] == "1234") {
-                $admin->setDni($form->getData()['dni']);
-                $admin->setEmail($form->getData()['email']);
-                $admin->setLastname($form->getData()['lastname']);
-                $admin->setName($form->getData()['name']);
-                $admin->setPhone($form->getData()['phone']);
-                $admin->setRoles(["ROLE_ADMIN"]);
                 
-                $hashedPassword = $passwordHasher->hashPassword( $admin, $form->getData()['password']);
-                $admin->setPassword($hashedPassword);
-                $adminRepository->add($admin, true);
+                $soapService = new SoapService();
+                $response = $soapService->userInsert_soap($form, Admin::STR_USER_TYPE);
+    
+                if (!$response->Resultado) {             
+                    $this->addFlash('massage', $response->Mensaje);
+    
+                    return $this->render('admin/new_externo.html.twig', [
+                        'form' => $form->createView()
+                    ]);
+                }
     
                 return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
 
