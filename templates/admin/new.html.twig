@@ -5,6 +5,13 @@
 {% block body %}
     <h1>Create new Admin</h1>
 
+    
+    {% for flash_message in app.session.flashbag.get('massage') %}
+        <div class="flash-danger">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
     {{ include('admin/_form.html.twig') }}
 
     <a href="{{ path('app_admin_index') }}">back to list</a>

@@ -6,6 +6,7 @@ use App\Entity\Admin;
 use App\Form\AdminType;
 use App\Repository\AdminRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use SoapClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -42,12 +43,27 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $admin->setRoles(["ROLE_ADMIN"]);
-            
-            $hashedPassword = $passwordHasher->hashPassword( $admin, $form['password']->getData() );
-            $admin->setPassword($hashedPassword);
+            $soapClient = new SoapClient("http://localhost/administrador/Soap/UserInsertSoap.php?wsdl");
 
-            $adminRepository->add($admin, true);
+            $params['dni_input'] = $form['dni']->getData();
+            $params['email_input'] = $form['email']->getData();
+            $params['lastname_input'] = $form['lastname']->getData();
+            $params['name_input'] = $form['name']->getData();
+            $params['password_input'] = $form['password']->getData();
+            $params['phone_input'] = $form['phone']->getData();
+            $params['userType_input'] = Admin::STR_USER_TYPE;
+            
+
+            $response = $soapClient->userInsertSoapService($params);
+
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+                
+                return $this->renderForm('admin/new.html.twig', [
+                    'admin' => $admin,
+                    'form' => $form,
+                ]);
+            }
 
             return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);
         }
