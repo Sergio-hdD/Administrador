@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\Admin;
 use App\Form\AdminType;
 use App\Repository\AdminRepository;
+use App\Service\SoapService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use SoapClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -43,22 +43,13 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $soapClient = new SoapClient("http://localhost/administrador/Soap/UserInsertSoap.php?wsdl");
 
-            $params['dni_input'] = $form['dni']->getData();
-            $params['email_input'] = $form['email']->getData();
-            $params['lastname_input'] = $form['lastname']->getData();
-            $params['name_input'] = $form['name']->getData();
-            $params['password_input'] = $form['password']->getData();
-            $params['phone_input'] = $form['phone']->getData();
-            $params['userType_input'] = Admin::STR_USER_TYPE;
-            
-
-            $response = $soapClient->userInsertSoapService($params);
+            $soapService = new SoapService();
+            $response = $soapService->userInsert_soap($form, Admin::STR_USER_TYPE);
 
             if (!$response->Resultado) {             
                 $this->addFlash('massage', $response->Mensaje);
-                
+
                 return $this->renderForm('admin/new.html.twig', [
                     'admin' => $admin,
                     'form' => $form,
