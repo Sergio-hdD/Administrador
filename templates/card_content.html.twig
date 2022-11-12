@@ -1,0 +1,17 @@
+<div class="col-12">
+	<div class="card shadow mb-4">
+		{% if title ?? false %} 
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-mda">{{title}}</h6>
+		</div>
+		{% endif %}
+		<div class="card-body">
+			{{detalle | raw }}
+		</div>
+		{% if footer ?? false %} 
+		<div class="card-footer py-3">
+			<h6 class="m-0 font-weight-bold text-mda">{{footer}}</h6>
+		</div>
+		{% endif %}
+	</div>
+</div>
