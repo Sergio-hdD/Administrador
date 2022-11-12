@@ -11,7 +11,7 @@ class SoapService {
     }
     
     function userInsert_soap($form, $userType){
-        $soapClient = new SoapClient("http://localhost/administrador/Soap/UserInsertSoap.php?wsdl");
+        $soapClient = new SoapClient("http://localhost/Administrador/Soap/UserInsertSoap.php?wsdl");
 
         $params['dni_input'] = $form['dni']->getData();
         $params['email_input'] = $form['email']->getData();

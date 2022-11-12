@@ -22,7 +22,7 @@ $server->wsdl->addComplexType(
         'name_input' => array('name' => 'name_input', 'type' => 'xsd:string'),
         'password_input' => array('name' => 'password_input', 'type' => 'xsd:string'),
         'phone_input' => array('name' => 'phone_input', 'type' => 'xsd:string'),
-        'userType_input' => array('name' => 'phone_input', 'type' => 'xsd:string'),
+        'userType_input' => array('name' => 'userType_input', 'type' => 'xsd:string'),
     )      
 );
 
@@ -92,7 +92,7 @@ function userInsertSoapService($request){
             $mensaje = "Error padre: ".mysqli_error($connection); //informo el error
         }
     } else { //Si se envia tipo de usuario invalido (válidos son: admin, student y teacher)
-        $mensaje = "Error: Elusario $name no se agrega, ya que el tipo $userType no es correcto"; 
+        $mensaje = "Error: El usuario $name no se agrega, ya que el tipo $userType no es correcto"; 
     }
 
     return array(
