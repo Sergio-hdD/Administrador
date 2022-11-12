@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Admin index</h1>
 
-    <table class="table">
+    <table class="table" id="datatable" id="datatable">
         <thead>
             <tr>
                 <th>Dni</th>
@@ -36,6 +36,44 @@
         {% endfor %}
         </tbody>
     </table>
-
     <a href="{{ path('app_admin_new') }}">Create new</a>
+{% endblock %}
+
+
+{% block javascripts %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+{{ parent() }}
+<script>
+    $(document).ready(function () {
+        $('#datatable').DataTable({
+            language: {
+                processing: "Cargando...",
+                search: "Buscar:",
+                lengthMenu: "Mostrar  _MENU_ elementos",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ elementos",
+                infoEmpty: "Mostrando 0 de 0 elementos",
+                infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                infoPostFix: "",
+                // loadingRecords: "Chargement en cours...",
+                zeroRecords: "No hay solicitudes coincidentes con la busqueda",
+                // emptyTable:     "Aucune donnée disponible dans le tableau",
+                paginate: {
+                    first: "<<",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: ">>"
+                },
+                // aria: {
+                // sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                // sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                // }
+            },
+
+            // order: [[ 3, "desc" ]]
+        });
+    });
+</script>
 {% endblock %}

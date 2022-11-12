@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Course;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,9 +14,24 @@ class CourseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('untilChangeNote')
-            ->add('dateStart')
-            ->add('dateEnd')
+            ->add('untilChangeNote', DateType::class, [
+                'required'=>false,
+                'widget' => 'single_text',
+                // 'format' => 'yyyy-MM-dd',
+                'by_reference' => true,
+            ])
+            ->add('dateStart', DateType::class, [
+                'required'=>false,
+                'widget' => 'single_text',
+                // 'format' => 'yyyy-MM-dd',
+                'by_reference' => true,
+            ])
+            ->add('dateEnd', DateType::class, [
+                'required'=>false,
+                'widget' => 'single_text',
+                // 'format' => 'yyyy-MM-dd',
+                'by_reference' => true,
+            ])
             ->add('dayCourse', ChoiceType::class, ['label' => 'Seleccione el día',
                 'choices'  => [
                     'Seleccione el día' => 0,

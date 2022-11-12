@@ -3,16 +3,19 @@
 {% block title %}New Admin{% endblock %}
 
 {% block body %}
-    <h1>Create new Admin</h1>
 
-    
     {% for flash_message in app.session.flashbag.get('massage') %}
         <div class="flash-danger">
             {{ flash_message }}
         </div>
     {% endfor %}
 
-    {{ include('admin/_form.html.twig') }}
+    {% set content = include('admin/_form.html.twig') %}
+        {% include "card_content.html.twig" with {
+        'appicon': 'fa-dashboard',
+        'title': 'Create new Admin.',
+        'detalle':content,
+        }
+    %}
 
-    <a href="{{ path('app_admin_index') }}">back to list</a>
 {% endblock %}
