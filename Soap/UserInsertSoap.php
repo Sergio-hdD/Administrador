@@ -72,7 +72,7 @@ function userInsertSoapService($request){
         }
         
         $user_query = "INSERT INTO user (dni, email, lastname, name, password, phone, roles, discr) VALUES
-        ('$dni', '$email', '$lastname', '$name', '$passwordHashed', '$phone', '$roles', 'admin')"; //Para insertar el padre
+        ('$dni', '$email', '$lastname', '$name', '$passwordHashed', '$phone', '$roles', '$userType')"; //Para insertar el padre
         
         $connection = new mysqli("localhost", "root", "", "db_api_rest_soap"); //el segundo es el username, el tercero la password, el cuarto database y el quinto (opcional) el puerto
         
