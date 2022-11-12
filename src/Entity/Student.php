@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Student extends User
 {
+    const STR_USER_TYPE = "student";
     /**
      * @ORM\OneToMany(targetEntity=StudentExam::class, mappedBy="student")
      */
