@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Student;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
+use App\Service\SoapService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,12 +39,19 @@ class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $student->setRoles(["ROLE_STUDENT"]);
-            
-            $hashedPassword = $passwordHasher->hashPassword( $student, $form['password']->getData() );
-            $student->setPassword($hashedPassword);
 
-            $studentRepository->add($student, true);
+                
+            $soapService = new SoapService();
+            $response = $soapService->userInsert_soap($form, Student::STR_USER_TYPE);
+
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+                
+                return $this->renderForm('student/new.html.twig', [
+                    'student' => $student,
+                    'form' => $form,
+                ]);
+            }
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
         }

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Teacher extends User
 {
+    const STR_USER_TYPE = "teacher";
     /**
      * @ORM\ManyToMany(targetEntity=Course::class, inversedBy="teachers")
      */

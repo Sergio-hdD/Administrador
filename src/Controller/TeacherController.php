@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Teacher;
 use App\Form\TeacherType;
 use App\Repository\TeacherRepository;
+use App\Service\SoapService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,12 +39,18 @@ class TeacherController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $teacher->setRoles(["ROLE_TEACHER"]);
-            
-            $hashedPassword = $passwordHasher->hashPassword( $teacher, $form['password']->getData() );
-            $teacher->setPassword($hashedPassword);
+                
+            $soapService = new SoapService();
+            $response = $soapService->userInsert_soap($form, Teacher::STR_USER_TYPE);
 
-            $teacherRepository->add($teacher, true);
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+
+                return $this->renderForm('teacher/new.html.twig', [
+                    'teacher' => $teacher,
+                    'form' => $form,
+                ]);
+            }
 
             return $this->redirectToRoute('app_teacher_index', [], Response::HTTP_SEE_OTHER);
         }
