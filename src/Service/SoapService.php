@@ -23,4 +23,20 @@ class SoapService {
         
         return $soapClient->userInsertSoapService($params);
     }
+
+    
+    function userUpdate_soap($id, $form, $userType){
+        $soapClient = new SoapClient("http://localhost/Administrador/Soap/UserUpdateSoap.php?wsdl");
+        
+        $params['id_user_input'] = $id;
+        $params['dni_input'] = $form['dni']->getData();
+        $params['email_input'] = $form['email']->getData();
+        $params['lastname_input'] = $form['lastname']->getData();
+        $params['name_input'] = $form['name']->getData();
+        $params['phone_input'] = $form['phone']->getData();
+        $params['userType_input'] = $userType;
+        
+        return $soapClient->userUpdateSoapService($params);
+    }
+
 }

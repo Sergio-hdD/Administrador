@@ -8,6 +8,7 @@ use App\Repository\StudentRepository;
 use App\Service\SoapService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -75,17 +76,30 @@ class StudentController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_student_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Student $student, StudentRepository $studentRepository, UserPasswordHasherInterface $passwordHasher): Response
+    public function edit(Request $request, Student $student): Response
     {
-        $form = $this->createForm(StudentType::class, $student);
+        $form = $this->createFormBuilder()
+        ->add('dni', TextType::class, ['attr' => ['placeholder' => 'DNI', 'value' => $student->getDni()], 'label' => 'DNI', 'required' => true])
+        ->add('email', TextType::class, ['attr' => ['placeholder' => 'Email', 'value' => $student->getEmail()], 'label' => 'Email', 'required' => true])
+        ->add('lastname', TextType::class, ['attr' => ['placeholder' => 'Lastname', 'value' => $student->getLastname()], 'label' => 'Lastname', 'required' => true])
+        ->add('name', TextType::class, ['attr' => ['placeholder' => 'Name', 'value' => $student->getName()], 'label' => 'Name', 'required' => true])
+        ->add('phone', TextType::class, ['attr' => ['placeholder' => 'Phone', 'value' => $student->getPhone()], 'label' => 'Phone', 'required' => true])
+        ->getForm();
+    
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            $hashedPassword = $passwordHasher->hashPassword( $student, $form['password']->getData() );
-            $student->setPassword($hashedPassword);
+            $soapService = new SoapService();
+            $response = $soapService->userUpdate_soap($student->getId(), $form, Student::STR_USER_TYPE);
 
-            $studentRepository->add($student, true);
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+
+                return $this->renderForm('student/edit.html.twig', [
+                    'admin' => $student,
+                    'form' => $form,
+                ]);
+            }
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
         }
