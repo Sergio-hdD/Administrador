@@ -5,36 +5,45 @@
 {% block body %}
     <h1>Admin index</h1>
 
-    <table class="table" id="datatable" id="datatable">
-        <thead>
-            <tr>
-                <th>Dni</th>
-                <th>Email</th>
-                <th>Lastname</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for admin in admins %}
-            <tr>
-                <td>{{ admin.dni }}</td>
-                <td>{{ admin.email }}</td>
-                <td>{{ admin.lastname }}</td>
-                <td>{{ admin.name }}</td>
-                <td>{{ admin.phone }}</td>
-                <td>
-                    <a href="{{ path('app_admin_show', {'id': admin.id}) }}">show</a>
-                    <a href="{{ path('app_admin_edit', {'id': admin.id}) }}">edit</a>
-                </td>
-            </tr>
+    <table class="table" id="datatable">
+        {% if admins|length > 0 %}
+            <thead>
+                <tr>
+                    <th>Dni</th>
+                    <th>Email</th>
+                    <th>Lastname</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            {% for admin in admins %}
+                <tbody>
+                    <tr>
+                        <td>{{ admin.dni }}</td>
+                        <td>{{ admin.email }}</td>
+                        <td>{{ admin.lastname }}</td>
+                        <td>{{ admin.name }}</td>
+                        <td>{{ admin.phone }}</td>
+                        <td>
+                            <a href="{{ path('app_admin_show', {'id': admin.id}) }}">show</a>
+                            <a href="{{ path('app_admin_edit', {'id': admin.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+            {% endfor %}
         {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>no records found</td>
+                </tr>
+            </tbody>        
+        {% endif %}
     </table>
     <a href="{{ path('app_admin_new') }}">Create new</a>
 {% endblock %}
@@ -42,8 +51,8 @@
 
 {% block javascripts %}
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
 {{ parent() }}
 <script>
