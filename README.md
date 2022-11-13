@@ -87,3 +87,48 @@ Me hubiese gustado poner la carpeta Soap dentro de la carpeta src, pero por prue
 ```
 SoapUI
 ```
+
+## Posibilidad de consumir el web service de SOAP por api (ABM sea admin, student o teacher)
+   NOTA 1: En el parámetro "userType_input" se deb especificar con que tipo de user se quiere trabajar (los valores posibles para este parámetro son admin, student o teacher). 
+   NOTA 2:Voy a poner el puerto 8000 en esta explicación pero puede cambiar (lo asigna [y muestra en consola] el server del proyeto al levantarlo).
+
+- Alta de user mediande soap (método POST)
+```
+http://localhost:8000/api/new
+
+body:
+{
+	"dni_input": "13900024",
+	"email_input": "email_3@gmail.com",
+	"lastname_input": "Lastname_3",
+	"name_input": "Name_3",
+	"password_input": "12345678",
+	"phone_input": "87654321",
+	"userType_input": "admin"
+}
+```
+- Modificación de user mediande soap (método POST)
+```
+http://localhost:8000/api/edit
+
+body:
+{
+	"id_user_input": 13,
+	"dni_input": "1390004",
+	"email_input": "email_4@gmail.com",
+	"lastname_input": "Lastname_4",
+	"name_input": "Name_4",
+	"phone_input": "87654324",
+	"userType_input": "admin"
+}
+```
+- Baja de user mediande soap (método POST)
+```
+http://localhost:8000/api/delete
+
+body:
+{
+	"id_user_input": 13,
+	"userType_input": "admin"
+}
+```
