@@ -42,7 +42,8 @@ class TeacherController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
                 
             $soapService = new SoapService();
-            $response = $soapService->userInsert_soap($form, Teacher::STR_USER_TYPE);
+            $params = $soapService->createParamsUserInsert($form, Teacher::STR_USER_TYPE);
+            $response = $soapService->userInsert_soap($params);
 
             if (!$response->Resultado) {             
                 $this->addFlash('massage', $response->Mensaje);
@@ -89,7 +90,8 @@ class TeacherController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $soapService = new SoapService();
-            $response = $soapService->userUpdate_soap($teacher->getId(), $form, Teacher::STR_USER_TYPE);
+            $params = $soapService->createParamsUserUpdate($teacher->getId(), $form, Teacher::STR_USER_TYPE);
+            $response = $soapService->userUpdate_soap($params);
 
             if (!$response->Resultado) {             
                 $this->addFlash('massage', $response->Mensaje);
