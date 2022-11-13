@@ -133,17 +133,30 @@ class AdminController extends AbstractController
      * @Route("/{id}/edit", name="app_admin_edit", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function edit(Request $request, Admin $admin, AdminRepository $adminRepository, UserPasswordHasherInterface $passwordHasher): Response
+    public function edit(Request $request, Admin $admin): Response
     {
-        $form = $this->createForm(AdminType::class, $admin);
+        $form = $this->createFormBuilder()
+        ->add('dni', TextType::class, ['attr' => ['placeholder' => 'DNI', 'value' => $admin->getDni()], 'label' => 'DNI', 'required' => true])
+        ->add('email', TextType::class, ['attr' => ['placeholder' => 'Email', 'value' => $admin->getEmail()], 'label' => 'Email', 'required' => true])
+        ->add('lastname', TextType::class, ['attr' => ['placeholder' => 'Lastname', 'value' => $admin->getLastname()], 'label' => 'Lastname', 'required' => true])
+        ->add('name', TextType::class, ['attr' => ['placeholder' => 'Name', 'value' => $admin->getName()], 'label' => 'Name', 'required' => true])
+        ->add('phone', TextType::class, ['attr' => ['placeholder' => 'Phone', 'value' => $admin->getPhone()], 'label' => 'Phone', 'required' => true])
+        ->getForm();
+    
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            $hashedPassword = $passwordHasher->hashPassword( $admin, $form['password']->getData() );
-            $admin->setPassword($hashedPassword);
+            $soapService = new SoapService();
+            $response = $soapService->userUpdate_soap($admin->getId(), $form, Admin::STR_USER_TYPE);
 
-            $adminRepository->add($admin, true);
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+
+                return $this->renderForm('admin/edit.html.twig', [
+                    'admin' => $admin,
+                    'form' => $form,
+                ]);
+            }
 
             return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);
         }
