@@ -43,7 +43,8 @@ class StudentController extends AbstractController
 
                 
             $soapService = new SoapService();
-            $response = $soapService->userInsert_soap($form, Student::STR_USER_TYPE);
+            $params = $soapService->createParamsUserInsert($form, Student::STR_USER_TYPE);
+            $response = $soapService->userInsert_soap($params);
 
             if (!$response->Resultado) {             
                 $this->addFlash('massage', $response->Mensaje);
@@ -90,7 +91,8 @@ class StudentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $soapService = new SoapService();
-            $response = $soapService->userUpdate_soap($student->getId(), $form, Student::STR_USER_TYPE);
+            $params = $soapService->createParamsUserUpdate($student->getId(), $form, Student::STR_USER_TYPE);
+            $response = $soapService->userUpdate_soap($params);
 
             if (!$response->Resultado) {             
                 $this->addFlash('massage', $response->Mensaje);

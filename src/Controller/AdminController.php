@@ -45,7 +45,8 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $soapService = new SoapService();
-            $response = $soapService->userInsert_soap($form, Admin::STR_USER_TYPE);
+            $params = $soapService->createParamsUserInsert($form, Admin::STR_USER_TYPE);
+            $response = $soapService->userInsert_soap($params);
 
             if (!$response->Resultado) {             
                 $this->addFlash('massage', $response->Mensaje);
@@ -92,7 +93,8 @@ class AdminController extends AbstractController
             if ($form->getData()['securityKey'] == "1234") {
                 
                 $soapService = new SoapService();
-                $response = $soapService->userInsert_soap($form, Admin::STR_USER_TYPE);
+                $params = $soapService->createParamsUserInsert($form, Admin::STR_USER_TYPE);
+                $response = $soapService->userInsert_soap($params);
     
                 if (!$response->Resultado) {             
                     $this->addFlash('massage', $response->Mensaje);
@@ -147,7 +149,8 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $soapService = new SoapService();
-            $response = $soapService->userUpdate_soap($admin->getId(), $form, Admin::STR_USER_TYPE);
+            $params = $soapService->createParamsUserUpdate($admin->getId(), $form, Admin::STR_USER_TYPE);
+            $response = $soapService->userUpdate_soap($params);
 
             if (!$response->Resultado) {             
                 $this->addFlash('massage', $response->Mensaje);
