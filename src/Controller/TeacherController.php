@@ -112,10 +112,17 @@ class TeacherController extends AbstractController
     /**
      * @Route("/{id}", name="app_teacher_delete", methods={"POST"})
      */
-    public function delete(Request $request, Teacher $teacher, TeacherRepository $teacherRepository): Response
+    public function delete(Request $request, Teacher $teacher): Response
     {
         if ($this->isCsrfTokenValid('delete'.$teacher->getId(), $request->request->get('_token'))) {
-            $teacherRepository->remove($teacher, true);
+            
+            $soapService = new SoapService();
+            $response = $soapService->userDelete_soap($teacher->getId(), Teacher::STR_USER_TYPE);
+
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+            }
+
         }
 
         return $this->redirectToRoute('app_teacher_index', [], Response::HTTP_SEE_OTHER);
