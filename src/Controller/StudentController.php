@@ -116,7 +116,14 @@ class StudentController extends AbstractController
     public function delete(Request $request, Student $student, StudentRepository $studentRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->request->get('_token'))) {
-            $studentRepository->remove($student, true);
+            
+            $soapService = new SoapService();
+            $response = $soapService->userDelete_soap($student->getId(), Student::STR_USER_TYPE);
+
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+            }
+
         }
 
         return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);

@@ -39,4 +39,14 @@ class SoapService {
         return $soapClient->userUpdateSoapService($params);
     }
 
+    
+    function userDelete_soap($id, $userType){
+        $soapClient = new SoapClient("http://localhost/Administrador/Soap/UserDeleteSoap.php?wsdl");
+        
+        $params['id_user_input'] = $id;
+        $params['userType_input'] = $userType;
+        
+        return $soapClient->userDeleteSoapService($params);
+    }
+
 }

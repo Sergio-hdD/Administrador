@@ -171,10 +171,17 @@ class AdminController extends AbstractController
      * @Route("/{id}", name="app_admin_delete", methods={"POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      */
-    public function delete(Request $request, Admin $admin, AdminRepository $adminRepository): Response
+    public function delete(Request $request, Admin $admin): Response
     {
         if ($this->isCsrfTokenValid('delete'.$admin->getId(), $request->request->get('_token'))) {
-            $adminRepository->remove($admin, true);
+
+            $soapService = new SoapService();
+            $response = $soapService->userDelete_soap($admin->getId(), Admin::STR_USER_TYPE);
+
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+            }
+
         }
 
         return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);
