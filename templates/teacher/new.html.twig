@@ -3,9 +3,19 @@
 {% block title %}New Teacher{% endblock %}
 
 {% block body %}
-    <h1>Create new Teacher</h1>
 
-    {{ include('teacher/_form.html.twig') }}
+    {% for flash_message in app.session.flashbag.get('massage') %}
+        <div class="flash-danger">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
 
-    <a href="{{ path('app_teacher_index') }}">back to list</a>
+    {% set content = include('teacher/_form.html.twig') %}
+        {% include "card_content.html.twig" with {
+        'appicon': 'fa-dashboard',
+        'title': 'Create new Teacher.',
+        'detalle':content,
+        }
+    %}
+
 {% endblock %}

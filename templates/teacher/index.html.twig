@@ -5,37 +5,85 @@
 {% block body %}
     <h1>Teacher index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Dni</th>
-                <th>Email</th>
-                <th>Lastname</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for teacher in teachers %}
-            <tr>
-                <td>{{ teacher.dni }}</td>
-                <td>{{ teacher.email }}</td>
-                <td>{{ teacher.lastname }}</td>
-                <td>{{ teacher.name }}</td>
-                <td>{{ teacher.phone }}</td>
-                <td>
-                    <a href="{{ path('app_teacher_show', {'id': teacher.id}) }}">show</a>
-                    <a href="{{ path('app_teacher_edit', {'id': teacher.id}) }}">edit</a>
-                </td>
-            </tr>
+    <table class="table" id="datatable">
+        {% if teachers|length > 0 %}
+            <thead>
+                <tr>
+                    <th>Dni</th>
+                    <th>Email</th>
+                    <th>Lastname</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            {% for teacher in teachers %}
+                <tbody>
+                    <tr>
+                        <td>{{ teacher.dni }}</td>
+                        <td>{{ teacher.email }}</td>
+                        <td>{{ teacher.lastname }}</td>
+                        <td>{{ teacher.name }}</td>
+                        <td>{{ teacher.phone }}</td>
+                        <td>
+                            <a href="{{ path('app_teacher_show', {'id': teacher.id}) }}">show</a>
+                            <a href="{{ path('app_teacher_edit', {'id': teacher.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+            {% endfor %}
         {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>no records found</td>
+                </tr>
+            </tbody>        
+        {% endif %}
     </table>
 
     <a href="{{ path('app_teacher_new') }}">Create new</a>
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+{{ parent() }}
+<script>
+    $(document).ready(function () {
+        $('#datatable').DataTable({
+            language: {
+                processing: "Cargando...",
+                search: "Buscar:",
+                lengthMenu: "Mostrar  _MENU_ elementos",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ elementos",
+                infoEmpty: "Mostrando 0 de 0 elementos",
+                infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                infoPostFix: "",
+                // loadingRecords: "Chargement en cours...",
+                zeroRecords: "No hay solicitudes coincidentes con la busqueda",
+                // emptyTable:     "Aucune donnée disponible dans le tableau",
+                paginate: {
+                    first: "<<",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: ">>"
+                },
+                // aria: {
+                // sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                // sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                // }
+            },
+
+            // order: [[ 3, "desc" ]]
+        });
+    });
+</script>
 {% endblock %}
