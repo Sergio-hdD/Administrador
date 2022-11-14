@@ -8,6 +8,8 @@ use App\Repository\StudentRepository;
 use App\Service\SoapService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/student")
- * @Security("is_granted('ROLE_ADMIN')")
  */
 class StudentController extends AbstractController
 {
     /**
      * @Route("/", name="app_student_index", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function index(StudentRepository $studentRepository): Response
     {
@@ -32,6 +34,7 @@ class StudentController extends AbstractController
 
     /**
      * @Route("/new", name="app_student_new", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function new(Request $request, StudentRepository $studentRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -66,6 +69,7 @@ class StudentController extends AbstractController
 
     /**
      * @Route("/{id}", name="app_student_show", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function show(Student $student): Response
     {
@@ -76,6 +80,7 @@ class StudentController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="app_student_edit", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function edit(Request $request, Student $student): Response
     {
@@ -114,6 +119,7 @@ class StudentController extends AbstractController
 
     /**
      * @Route("/{id}", name="app_student_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function delete(Request $request, Student $student, StudentRepository $studentRepository): Response
     {
@@ -130,4 +136,46 @@ class StudentController extends AbstractController
 
         return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    
+    /**
+     * @Route("/change/password", name="app_student_change_password", methods={"GET", "POST"})
+     */
+    public function chagengePassword(Request $request, StudentRepository $studentRepository): Response
+    {
+
+        $form = $this->createFormBuilder()
+            ->add('oldPassword', PasswordType::class, ['attr' => ['placeholder' => 'Password actual'], 'label' => 'Password actual', 'required' => true])
+            ->add('newPassword', PasswordType::class, ['attr' => ['placeholder' => 'Nueva password'], 'label' => 'Nueva password', 'required' => true])
+            ->add('confirmPassword', PasswordType::class, ['attr' => ['placeholder' => 'Confirme su password'], 'label' => 'Confirme su password', 'required' => true])
+            ->add('submit', SubmitType::class, [ 'attr' => ['class' => 'btn btn-primary w-100',], 'label' => '<i class="fas fa-sync fa-spin"></i> Guardar', 'label_html' => true,]) 
+            ->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $student = $studentRepository->findOneBy(['email' => $this->getUser()->getUserIdentifier()]);
+
+            $soapService = new SoapService();
+            $params = $soapService->createParamsChangePassword($form, $student->getId());
+
+            $response = $soapService->student_change_password($params);
+
+            if (!$response->Resultado) {             
+                $this->addFlash('massage', $response->Mensaje);
+
+                return $this->render('student/cambio_password.html.twig', [
+                    'form' => $form->createView()
+                ]);
+            }
+
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('student/cambio_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
 }

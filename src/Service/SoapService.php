@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Student;
 use SoapClient;
 
 class SoapService {
@@ -33,6 +34,11 @@ class SoapService {
         return $soapClient->userDeleteSoapService($params);
     }
 
+    function student_change_password($params){
+        $soapClient = new SoapClient("http://localhost/Administrador/Soap/Student/StudentChangePasswordSoap.php?wsdl");
+        
+        return $soapClient->studentChangePasswordSoapService($params);
+    }
         
     function createParamsUserInsert($form, $userType){
 
@@ -40,7 +46,11 @@ class SoapService {
         $params['email_input'] = $form['email']->getData();
         $params['lastname_input'] = $form['lastname']->getData();
         $params['name_input'] = $form['name']->getData();
-        $params['password_input'] = $form['password']->getData();
+        if($userType == Student::STR_USER_TYPE){
+            $params['password_input'] = $form['dni']->getData();
+        } else {
+            $params['password_input'] = $form['password']->getData();
+        }
         $params['phone_input'] = $form['phone']->getData();
         $params['userType_input'] = $userType;
         
@@ -61,4 +71,13 @@ class SoapService {
         return $params;
     }
 
+    function createParamsChangePassword($form, $id_student){
+        
+        $params['id_user_input'] = $id_student;
+        $params['old_password_input'] = $form['oldPassword']->getData(); 
+        $params['new_password_input'] = $form['newPassword']->getData();
+        $params['confirm_password_input'] = $form['confirmPassword']->getData();
+
+        return $params;
+    }
 }

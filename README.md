@@ -132,3 +132,15 @@ body:
 	"userType_input": "admin"
 }
 ```
+- Cambio de contraseña temporal mediande soap (método POST)
+```
+http://localhost:8000/api/change/password
+
+body:
+{
+	"id_user_input": 2,
+	"old_password_input": "123456",
+  "new_password_input": "12345678",
+	"confirm_password_input": "12345678"
+}
+```
