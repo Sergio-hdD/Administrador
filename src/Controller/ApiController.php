@@ -49,6 +49,24 @@ class ApiController extends AbstractController
         );
     }
 
+    
+    /**
+     * @Route("/change/password", name="api_student_change_password", methods={"POST"})
+     */
+    public function change_password(Request $request): Response
+    {
+        $response= new JsonResponse();
+        $data=json_decode($request->getContent());
+        
+        $soapService = new SoapService();
+        $response_soap = $soapService->student_change_password($data);
+        
+        return $response->setData(
+            $response_soap
+        );
+    }
+    
+
     /**
      * @Route("/delete", name="api_user_delete", methods={"POST"})
      */

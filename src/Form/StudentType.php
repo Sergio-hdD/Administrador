@@ -18,7 +18,6 @@ class StudentType extends AbstractType
             ->add('email', EmailType::class)
             ->add('lastname')
             ->add('name')
-            ->add('password', PasswordType::class)
             ->add('phone')
         ;
     }
