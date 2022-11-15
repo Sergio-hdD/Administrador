@@ -15,7 +15,6 @@ class MatterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('isFirstFourMonth', CheckboxType::class, ['label' => 'Es del primer cuatrimestre', 'required' => true])
             ->add('name', TextType::class, ['attr' => ['placeholder' => 'Name'], 'label' => 'Name', 'required' => true])
             ->add('yearCarrer', ChoiceType::class, ['label' => 'Seleccione el año',
                 'choices'  => [
@@ -27,6 +26,7 @@ class MatterType extends AbstractType
                     'Quinto' => 'Quinto'
                 ], 
             ])
+            ->add('isFirstFourMonth', CheckboxType::class, ['label' => 'Es del primer cuatrimestre'])
         ;
     }
 

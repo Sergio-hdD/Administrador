@@ -202,6 +202,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function __toString(){
-        return "User: ".$this->getLastname()." ".$this->getName();        
+        return $this->getLastname()." ".$this->getName();        
     }
 }

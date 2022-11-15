@@ -53,7 +53,7 @@ class Matter
     public function __toString()
     {
         $cuatrimestre = ($this->isFirstFourMonth)? "Primero" : "Segundo";
-        return "Materia ".$this->name." pertenece a ". $this->yearCarrer." año, cuantrimestre ".$cuatrimestre;
+        return "Materia ".$this->name." pertenece a ". $this->yearCarrer." año, cuatrimestre ".$cuatrimestre;
     }
     public function getId(): ?int
     {

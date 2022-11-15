@@ -3,9 +3,13 @@
 {% block title %}New Exam{% endblock %}
 
 {% block body %}
-    <h1>Create new Exam</h1>
 
-    {{ include('exam/_form.html.twig') }}
+    {% set content = include('exam/_form.html.twig') %}
+        {% include "card_content.html.twig" with {
+        'appicon': 'fa-dashboard',
+        'title': 'Create new Exam.',
+        'detalle':content,
+        }
+    %}
 
-    <a href="{{ path('app_exam_index') }}">back to list</a>
 {% endblock %}

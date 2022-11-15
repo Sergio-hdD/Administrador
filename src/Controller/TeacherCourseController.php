@@ -6,18 +6,46 @@ use App\Entity\Course;
 use App\Entity\Teacher;
 use App\Repository\CourseRepository;
 use App\Repository\TeacherRepository;
+use App\Service\ConsultasService;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/teacher_course")
+ */
 class TeacherCourseController extends AbstractController
 {
+
     /**
-     * @Route("/teacher/course/new", name="app_new_teacher_course", methods={"GET", "POST"})
+     * @Route("/", name="app_teacher_course_index", methods={"GET"})
+     */
+    public function index(CourseRepository $courseRepository,TeacherRepository $teacherRepository, ConsultasService $consultasService): Response
+    {
+        $teachers_courses = array();
+
+        foreach ($teacherRepository->findAll() as $teacher) {
+            $courses = array();
+            foreach ($consultasService->traerIdCursosDelProfesor($teacher->getId()) as $container_course_id) {
+                array_push($courses, $courseRepository->findOneBy([ 'id' => intval($container_course_id['course_id']) ]));
+            }
+            array_push($teachers_courses, $teacher);
+            array_push($teachers_courses, $courses);
+
+        }
+
+        return $this->render('teacher_course/index.html.twig', [
+            'teachers_courses' => $teachers_courses,
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="app_new_teacher_course", methods={"GET", "POST"})
      */
     public function login(Request $request, TeacherRepository $teacherRepository, CourseRepository $courseRepository): Response
     {

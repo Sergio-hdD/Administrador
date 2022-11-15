@@ -3,9 +3,13 @@
 {% block title %}New InscriptionExam{% endblock %}
 
 {% block body %}
-    <h1>Create new InscriptionExam</h1>
 
-    {{ include('inscription_exam/_form.html.twig') }}
-
-    <a href="{{ path('app_inscription_exam_index') }}">back to list</a>
+    {% set content = include('inscription_exam/_form.html.twig') %}
+        {% include "card_content.html.twig" with {
+        'appicon': 'fa-dashboard',
+        'title': 'Create new Inscription (Exam).',
+        'detalle':content,
+        }
+    %}
+    
 {% endblock %}
