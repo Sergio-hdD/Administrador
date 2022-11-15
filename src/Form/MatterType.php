@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Matter;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,7 +25,7 @@ class MatterType extends AbstractType
                     'Quinto' => 'Quinto'
                 ], 
             ])
-            ->add('isFirstFourMonth', CheckboxType::class, ['label' => 'Es del primer cuatrimestre'])
+            ->add('isFirstFourMonth', null, ['label' => 'Es del primer cuatrimestre'])
         ;
     }
 
