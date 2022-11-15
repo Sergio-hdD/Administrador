@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+{% endblock %}
+
+{% block title %}Planilla de cuatrimestre{% endblock %}
+
+{% block body %}
+    <div class="card shadow mb-4">	 
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Planilla de cuatrimestre</h6>
+        </div>
+        <div class="card-body mb-5" align="center">
+            <span>Turno</span>   
+            <div>
+                <select name="turno" id="turno" class="form-select mb-5" required>
+                    <option value>Seleccione un turno</option>
+                    <option value="Mañana">Mañana</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noche">Noche</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="listado" class="mt-2 table-responsive p-1" style="display:none;">
+            <table id="consulta" class="table table-striped table-bordered" style="width:100%" align="center">
+                <thead id="thcampos" align="center">
+                    <tr>
+                        <th>Materia</th>
+                        <th>Año</th>
+                        <th>Día de cursada</th>
+                        <th>Inicio</th>
+                        <th>Fín</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    {#  PDF CON MEJOR VISTA #}
+    <div class="row" align="center">
+        <div>
+            <a class= "btn btn-info btn-sm mr-1 text-white" id="buttonPDF" style="display:none;">PDF</a>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.53/build/pdfmake.min.js"></script>
+<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.53/build/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+
+{{ parent() }}
+<script>
+    $(document).ready(function () {
+
+        //Si cambia el select de tipo Cultivo
+        $('#turno').on('change', function(){
+            //valor del select tipoCultivo
+            var turnoSeleccionado = $(this).val();
+
+            $("#listado").show();
+
+            var table=$('#consulta').DataTable( {  
+                destroy: true,
+                scrollX: true,
+                orderCellsTop: true,
+                fixedHeader: true,
+                processing: true,
+                dom:'Bfrtip', 
+                buttons: [ 'pdf'],
+                ajax:{
+                    url: `{{ path('get_cursos_por_turno', {'turno': 'value_input' }) }}`.replace('value_input', turnoSeleccionado),
+                    type : 'GET',
+                    dataType : 'json', 
+                    select: true,
+                    "dataSrc": function ( data ) {
+                        var years_carrer = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto'];
+                        var fila = 0;
+                        $.each(years_carrer, function(i, year) {
+                            $.each(data, function(j, elemento) {
+                                if(elemento.year_carrer == year){
+                                    data[fila][0] = elemento.name,
+                                    data[fila][1] = elemento.year_carrer,
+                                    data[fila][2] = elemento.day_course,
+                                    data[fila][3] = elemento.date_start,
+                                    data[fila][4] = elemento.date_end;
+                                    fila++;
+                                }
+                            });
+                        });
+                        return data;
+                    }
+                },
+                language: {
+                    processing: "Cargando...",
+                    search: "Buscar en el  listado:",
+                    zeroRecords: '<label class="text text-danger">No hay solicitudes coincidentes con la búsqueda</label>',
+                    paginate: {
+                    first: "<<",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: ">>"
+                    },
+                    lengthMenu: " ",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ elementos",
+                    infoEmpty: "Mostrando 0 de 0 elementos",
+                    infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                }
+            });
+
+            var url = `{{ path('planilla_cuatrimestral_pdf', {'turno': 'id_input' }) }}`.replace('id_input', turnoSeleccionado);
+            $('#buttonPDF').attr("href", url);
+            $('#buttonPDF').show();
+        });
+
+    });
+</script>
+{% endblock %}

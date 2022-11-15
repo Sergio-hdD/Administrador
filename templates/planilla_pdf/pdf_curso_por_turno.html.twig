@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+	<link src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.0.63/print.css"></link>
+{% endblock %}
+
+{% block title %}Planilla de cuatrimestre{% endblock %}
+
+{% block body %}
+    <center>
+		<button class="btn btn-primary float-center " id="printButton">
+			<i class="fa fa-print"></i> PDF
+		</button>
+	</center>
+    <div class="col-md-12 mt-4" id="contenido_pdf">
+		<div class="card-body text-black">
+    		<div class="row" align="center">
+                <h2 class="m-0 font-weight-bold text-info">Planilla de cuatrimestre</h2>
+        	</div>
+            <div id="listado" class="mt-2 table-responsive p-1">
+                <table id="consulta" class="table table-striped table-bordered" style="width:100%" align="center">
+                    <thead id="thcampos" align="center">
+                        <tr>
+                            <th>Materia</th>
+                            <th>Año</th>
+                            <th>Día de cursada</th>
+                            <th>Inicio</th>
+                            <th>Fín</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reporte in  reporteDeCursada %}
+                            <tr align="center">
+                                <td>{{ reporte.name }}</td>
+                                <td>{{ reporte.year_carrer }}</td>
+                                <td>{{ reporte.day_course }}</td>
+                                <td>{{ reporte.date_start }}</td>
+                                <td>{{ reporte.date_end }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+	</div>
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.0.63/print.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function print() {
+            printJS({
+                printable: 'contenido_pdf',
+                documentTitle: 'Planilla de cuatrimestre',
+                type: 'html',
+                targetStyles: ['*'],
+                gridHeaderStyle: 'font-weight: bold; padding: 150px; border: 1px solid #dddddd;',
+                repeatTableHeader: true,
+                imageStyle: 'width:10%;',
+                maxWidth: 850,
+                style: '@page{size: 210 mm 297 mm;	margin: 10 mm 10 mm;}',
+                font_size: ' 16 pt',
+                repeatTableHeader: true,
+                documentTitleque: 'Planilla de cuatrimestre'
+
+            })
+        }
+        document.getElementById('printButton').addEventListener("click", print)
+    });
+</script>
+{% endblock %}
