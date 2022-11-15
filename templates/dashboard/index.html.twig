@@ -11,7 +11,7 @@
 
     <h2 class="text-center mb-4">Bienvenido al {{ controller_name }} {{ app.user.userName }}! ✅</h2>
 
-    <div class="card m-2" style="width: 18rem;">
+    <div class="card m-2" style="width: 22rem;">
         <div class="card-body">
             <h5 class="card-title">Crear</h5>
             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -20,12 +20,18 @@
                     <li><code><a href="{{ path('app_admin_new') }}">Crear un Administrador</a></code></li>
                     <li><code><a href="{{ path('app_teacher_new') }}">Crear un Profesor</a></code></li>
                     <li><code><a href="{{ path('app_student_new') }}">Crear un Estudiante</a></code></li>
+                    <li><code><a href="{{ path('app_matter_new') }}">Agregar una Materia</a></code></li>
+                    <li><code><a href="{{ path('app_course_new') }}">Agregar un Curso</a></code></li>
+                    <li><code><a href="{{ path('app_new_teacher_course') }}">Agregar Profesor a un curso</a></code></li>
+                    <li><code><a href="{{ path('app_exam_new') }}">Agregar un Examen</a></code></li>
+                    <li><code><a href="{{ path('app_inscription_exam_new') }}">Agregar Inscripción a examen</a></code></li>
+                    <li><code><a href="{{ path('app_inscription_course_new') }}">Agregar Inscripción a curso</a></code></li>
                 </ul>
             </p>
         </div>
     </div>
 
-    <div class="card m-2" style="width: 18rem;">
+    <div class="card m-2" style="width: 22rem;">
         <div class="card-body">
             <h5 class="card-title">Ver todos</h5>
             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -34,6 +40,12 @@
                     <li><code><a href="{{ path('app_admin_index') }}">Ver los Administradores</a></code></li>
                     <li><code><a href="{{ path('app_teacher_index') }}">Ver los Profesores</a></code></li>
                     <li><code><a href="{{ path('app_student_index') }}">Ver los Estudiantes</a></code></li>
+                    <li><code><a href="{{ path('app_matter_index') }}">Ver las Materias</a></code></li>
+                    <li><code><a href="{{ path('app_course_index') }}">Ver los Cursos</a></code></li>
+                    <li><code><a href="{{ path('app_teacher_course_index') }}">Ver curso/s de un Profesor</a></code></li>
+                    <li><code><a href="{{ path('app_exam_index') }}">Ver los Examenes</a></code></li>
+                    <li><code><a href="{{ path('app_inscription_exam_index') }}">Ver las Inscripción a examen</a></code></li>
+                    <li><code><a href="{{ path('app_inscription_course_index') }}">Ver las Inscripción a curso</a></code></li>
                 </ul>
             </p>
         </div>

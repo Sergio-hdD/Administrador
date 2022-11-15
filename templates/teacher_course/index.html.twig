@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teacher_course index{% endblock %}
+
+{% block body %}
+
+    <h1>Teacher_course index</h1>
+
+    {% set i = 0 %}
+    {% for teacher in teachers_courses %}
+        {% if (i % 2) == 0 %}
+            <table class="table">
+                <strong>  Profesor </strong>
+                <thead>
+                    <tr>
+                        <th>Dni</th>
+                        <th>Email</th>
+                        <th>Lastname</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% set teacher = teachers_courses[i] %}
+                        <td>{{ teacher.dni }}</td>
+                        <td>{{ teacher.email }}</td>
+                        <td>{{ teacher.lastname }}</td>
+                        <td>{{ teacher.name }}</td>
+                        <td>{{ teacher.phone }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            {% set j = 0 %}
+            <table class="table">
+                <strong> Curso/cursos </strong>
+                <thead>
+                    <tr>
+                        <th>UntilChangeNote</th>
+                        <th>DateStart</th>
+                        <th>DateEnd</th>
+                        <th>DayCourse</th>
+                        <th>Turn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% set course = teachers_courses[i][j] %}
+                        <td>{{ course.untilChangeNote ? course.untilChangeNote|date('Y-m-d') : '' }}</td>
+                        <td>{{ course.dateStart ? course.dateStart|date('Y-m-d') : '' }}</td>
+                        <td>{{ course.dateEnd ? course.dateEnd|date('Y-m-d') : '' }}</td>
+                        <td>{{ course.dayCourse }}</td>
+                        <td>{{ course.turn }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <hr/>
+        {% endif %}
+        {% set i = i + 1 %}
+    {% endfor %}
+
+{% endblock %}
