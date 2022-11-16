@@ -60,7 +60,11 @@ function userInsertSoapService($request){
         $dni = $request['dni_input'];
         $email = $request['email_input'];
         $lastname = $request['lastname_input'];
-        $passwordHashed = password_hash($request['password_input'], PASSWORD_DEFAULT);
+        if($userType == "student"){
+            $passwordHashed = password_hash($dni, PASSWORD_DEFAULT);
+        } else {
+            $passwordHashed = password_hash($request['password_input'], PASSWORD_DEFAULT);
+        }
         $phone = $request['phone_input'];
 
         if($userType == "admin"){
@@ -70,6 +74,7 @@ function userInsertSoapService($request){
         } else {
             $roles = '[\"ROLE_STUDENT\"]';
         }
+
         
         $user_query = "INSERT INTO user (dni, email, lastname, name, password, phone, roles, discr) VALUES
         ('$dni', '$email', '$lastname', '$name', '$passwordHashed', '$phone', '$roles', '$userType')"; //Para insertar el padre
