@@ -1,5 +1,10 @@
 # Administrador
 
+## NOTA
+```
+Todos los commit's de este repositorio fueron hechos entre Octubre y Noviembre de 2022, solo el primero quedó con la fecha original los además se cambiaron por una prueba hecha en 2024 (prueba que cambió el historial).
+```
+
 ## Por las configuraciones que agrega en "config/packages/security.yaml" (que se usan en login)  creo el User con:
 ```
 php bin/console make:user
