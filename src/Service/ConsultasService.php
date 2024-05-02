@@ -55,7 +55,7 @@ class ConsultasService
                 INNER JOIN teacher_exam te on te.exam_id=e.id
                 INNER JOIN teacher t on te.teacher_id=t.id
                 INNER JOIN user u on u.id=t.id
-                WHERE fecha 
+                WHERE e.fecha 
                 BETWEEN '" . $fechaDesde . "' AND '" . $fechaHasta . "'";
         return $this->Myquery($sql);
     }
